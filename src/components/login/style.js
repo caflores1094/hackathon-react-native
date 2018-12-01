@@ -36,4 +36,10 @@ export default StyleSheet.create({
         fontSize: fonts.md,
         fontWeight: '600',
     },
+    error: {
+        color: '#cc0000',
+        fontSize: fonts.md,
+        textAlign: 'center',
+        marginTop: 20,
+    },
 })

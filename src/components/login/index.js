@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './style.js'
 import endpoints from '../../utils/endpoints.js';
+import { getUserToken, ERROR_MESSAGES } from '../../utils/login-helper.js';
 import {
     AsyncStorage,
     Text,
@@ -18,6 +19,7 @@ class Login extends Component {
     state = {
         username: '',
         password: '',
+        loginError: null,
     }
 
 
@@ -31,38 +33,17 @@ class Login extends Component {
             userName: this.state.username,
             password: this.state.password,
         };
-
-        fetch('https://api.forio.com/v2/authentication/', {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers,
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.warn('from api call: ', data);
-                // AsyncStorage.setItem('userToken', data.access_token)
-                //     .then((res) => {
-                //         this.props.navigation.navigate('App');
-                //     });
-            })
-            .catch((err) => {
-                console.error('error with auth: ', err);
-            });
-    }
-
-    _signInAsync = async () => {
-        const userToken = await new Promise(resolve => {
-            //FETCH THE EPICENTER AUTH API STUFF HERE INSTEAD OF THE TIMEOUT
-            setTimeout(() => {
-                console.warn('sent username and password: ', this.state.username, this.state.password);
-                AsyncStorage.setItem('userToken', `token-${this.state.username}-${this.state.password}`)
+        const token = getUserToken(this.state.username, this.state.password)
+            .then(({ token, userId, userName }) => {
+                AsyncStorage.setItem('userToken', token)
                     .then((res) => {
-                        console.warn(res);
                         this.props.navigation.navigate('App');
                     });
-            }, 1000);
-        });
-    };
+            })
+            .catch((err) => {
+                this.setState({ loginError: ERROR_MESSAGES[err] });
+            });
+    }
 
     render() {
         return (
@@ -87,15 +68,10 @@ class Login extends Component {
                 >
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
+                { this.state.loginError ? <Text style={styles.error}>{this.state.loginError}</Text> : null}
             </View>
         );
     }
 }
 
 export default Login;
-// <TouchableOpacity
-// style={styles.button}
-// onPress={this._signInAsync}
-// >
-// <Text style={styles.buttonText}>Login</Text>
-// </TouchableOpacity>
