@@ -20,6 +20,36 @@ class Login extends Component {
         password: '',
     }
 
+
+    handleLogin = () => {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        const body = {
+            account: endpoints.account,
+            userName: this.state.username,
+            password: this.state.password,
+        };
+
+        fetch('https://api.forio.com/v2/authentication/', {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers,
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.warn('from api call: ', data);
+                // AsyncStorage.setItem('userToken', data.access_token)
+                //     .then((res) => {
+                //         this.props.navigation.navigate('App');
+                //     });
+            })
+            .catch((err) => {
+                console.error('error with auth: ', err);
+            });
+    }
+
     _signInAsync = async () => {
         const userToken = await new Promise(resolve => {
             //FETCH THE EPICENTER AUTH API STUFF HERE INSTEAD OF THE TIMEOUT
@@ -38,12 +68,14 @@ class Login extends Component {
         return (
             <View style={styles.container}>
                 <TextInput
+                    autoCapitalize="none"
                     style={styles.textInput}
                     value={this.state.username}
                     onChangeText={(username) => this.setState({ username })}
                     placeholder="Username"
                 />
                 <TextInput
+                    autoCapitalize="none"
                     style={styles.textInput}
                     value={this.state.password}
                     onChangeText={(password) => this.setState({ password })}
@@ -51,7 +83,7 @@ class Login extends Component {
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={this._signInAsync}
+                    onPress={this.handleLogin}
                 >
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
@@ -61,3 +93,9 @@ class Login extends Component {
 }
 
 export default Login;
+// <TouchableOpacity
+// style={styles.button}
+// onPress={this._signInAsync}
+// >
+// <Text style={styles.buttonText}>Login</Text>
+// </TouchableOpacity>
