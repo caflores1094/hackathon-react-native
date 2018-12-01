@@ -1,41 +1,22 @@
-// import React from 'react';
-// import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
-// import MainPage from './main-page';
-// import Login from './login';
-// import SecondScreen from './second-screen';
-//
-// const AppStack = createStackNavigator({ Main: MainPage, Second: SecondScreen });
-// const AuthStack = createStackNavigator({ Login: Login });
-//
-// const AppNavigator = createAppContainer(createSwitchNavigator(
-//     {
-//         // AuthLoading: AuthLoadingScreen,
-//         App: AppStack,
-//         // Auth: AuthStack,
-//         Login: Login,
-//     },
-//     {
-//         initialRouteName: 'Login',
-//     }
-// ));
-//
-// export default AppNavigator;
-
 import React from 'react';
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import MainPage from './main-page';
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
+import MainPage from './main';
 import Login from './login';
 import SecondScreen from './second-screen';
+import AuthLoading from './auth-loading';
 
-const AppNavigator = createStackNavigator(
+const AppStack = createStackNavigator({ Main: MainPage, Second: SecondScreen });
+const AuthStack = createStackNavigator({ Login: Login });
+
+const AppNavigator = createAppContainer(createSwitchNavigator(
     {
-        Login: Login,
-        Main: MainPage,
-        Second: SecondScreen,
+        AuthLoading: AuthLoading,
+        App: AppStack,
+        Auth: AuthStack,
     },
     {
-        initialRouteName: "Main",
+        initialRouteName: 'AuthLoading',
     }
-);
+));
 
 export default AppNavigator;
