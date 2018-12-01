@@ -35,7 +35,9 @@ class Login extends Component {
         };
         const token = getUserToken(this.state.username, this.state.password)
             .then(({ token, userId, userName }) => {
-                AsyncStorage.setItem('userToken', token)
+                //TODO: Set the userid and username in REDUX not in the asyncStorage (maybe leave the userId in storage)
+                AsyncStorage.multiSet([['userToken', token], ['userId', userId], ['userName', userName]])
+                // AsyncStorage.setItem('userToken', token)
                     .then((res) => {
                         this.props.navigation.navigate('App');
                     });

@@ -32,7 +32,7 @@ export const getUserToken = (userName, password) => {
                 encoded += '=';
             }
             const info = JSON.parse(decodeString(encoded))
-            console.log('info: ', info);
+            // console.log('info: ', info);
             return Promise.resolve({
                 token: data.access_token,
                 userId: info.user_id,

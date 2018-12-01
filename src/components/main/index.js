@@ -14,24 +14,40 @@ class MainPage extends Component {
             />
         ),
     });
-    state = { background: COLORS[0].hexCode }
+    state = { background: COLORS[0].hexCode, userName: '' }
+
     componentDidMount() {
         this.props.navigation.setParams({ logout: this._logout });
+        this._bootstrapAsync();
     }
-    onChooseColor() {
-        const randomIdx = Math.floor(Math.random() * (COLORS.length));
-        this.setState({ background: COLORS[randomIdx].hexCode});
-    }
+
+    // TODO: THIS WILL BE OBSOLETE ONCE REDUX STORE PROPER INFO, FOR NOW TO SEE IF WORKS
+    _bootstrapAsync = async () => {
+        const sessionInfo = await new Promise(resolve => {
+            //FETCH THE EPICENTER AUTH API STUFF HERE INSTEAD OF THE TIMEOUT
+            setTimeout(() => {
+                resolve(AsyncStorage.multiGet(['userToken', 'userId', 'userName']));
+                // resolve(AsyncStorage.getItem('userToken'));
+            }, 0);
+        });
+
+        this.setState({ userName: sessionInfo[2][1] });
+    };
 
     _logout = async () => {
         await AsyncStorage.removeItem('userToken').then((result) => console.warn(result, 'done with token'));
         this.props.navigation.navigate('Auth');
     }
 
+    onChooseColor() {
+        const randomIdx = Math.floor(Math.random() * (COLORS.length));
+        this.setState({ background: COLORS[randomIdx].hexCode});
+    }
+
     render() {
         return (
             <View style={{ ...styles.container, backgroundColor: this.state.background }}>
-                <Text style={styles.header}>Welcome to the App</Text>
+                <Text style={styles.header}>Welcome, {this.state.userName}</Text>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => this.onChooseColor()}

@@ -15,18 +15,18 @@ class AuthLoadingScreen extends React.Component {
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
-        const userToken = await new Promise(resolve => {
+        const sessionInfo = await new Promise(resolve => {
             //FETCH THE EPICENTER AUTH API STUFF HERE INSTEAD OF THE TIMEOUT
             setTimeout(() => {
-                // console.warn('done!');
-                resolve(AsyncStorage.getItem('userToken'));
+                resolve(AsyncStorage.multiGet(['userToken', 'userId', 'userName']));
+                // resolve(AsyncStorage.getItem('userToken'));
             }, 0);
         });
 
         // This will switch to the App screen or Auth screen and this loading
         // screen will be unmounted and thrown away.
-        console.warn('checking userToken', userToken);
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+        // console.warn('checking sessionInfo', sessionInfo);
+        this.props.navigation.navigate(sessionInfo[0][1] ? 'App' : 'Auth');
     };
 
     // Render any loading content that you like here
