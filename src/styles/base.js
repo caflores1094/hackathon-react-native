@@ -10,6 +10,7 @@ export const colors  = {
   secondary: '#254B5A',
   tertiary: '#5DA6A7',
   button: '#fff',
+  background: '#ececec',
 }
 
 export const padding = {

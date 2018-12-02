@@ -1,8 +1,3 @@
-// // Obtain the CometD APIs.
-// var lib = require('cometd');
-//
-// // Create the CometD object.
-// var cometd = new lib.CometD();
 import endpoints from './endpoints.js';
 import lib from 'cometd';
 const cometd = new lib.CometD();
@@ -18,7 +13,7 @@ class CometdHelper {
         }, options);
     }
 
-    subscribe(callback) {
+    subscribe(channelName, callback) {
         AsyncStorage.multiGet(['userToken', 'userName'])
             .then((result) => {
                 const token = result[0][1];
@@ -45,22 +40,17 @@ class CometdHelper {
                cometd.handshake(cometdOptions);
 
                //Now Subscribe to the channels you need
-               //TODO REMOVE: DEFAULT NAME TO TEST
-               const channelName = '/group/forio-dev/carlos-hackathon/';
                this.registerChannel(channelName, callback);
            });
     }
 
     registerChannel(channel, cb) {
         cometd.subscribe(channel, function(message) {
-            console.log('in channel: ', channel);
-            console.warn('new message: ', message.data);
             cb(message.data);
         });
     }
 
-    publish(message) {
-        const channel = '/group/forio-dev/carlos-hackathon/';
+    publish(channel, message) {
         cometd.publish(channel, message);
     }
 
