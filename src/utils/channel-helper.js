@@ -18,7 +18,7 @@ class CometdHelper {
         }, options);
     }
 
-    subscribe(channelName) {
+    subscribe(callback) {
         AsyncStorage.multiGet(['userToken', 'userName'])
             .then((result) => {
                 const token = result[0][1];
@@ -46,18 +46,16 @@ class CometdHelper {
 
                //Now Subscribe to the channels you need
                //TODO REMOVE: DEFAULT NAME TO TEST
-               channelName = '/group/forio-dev/carlos-hackathon/';
-               this.registerChannel(channelName);
-
-               //TESTING THE PUBLISH
-               setTimeout(() => this.publish('testing testing testing'), 5000);
+               const channelName = '/group/forio-dev/carlos-hackathon/';
+               this.registerChannel(channelName, callback);
            });
     }
 
-    registerChannel(channel) {
+    registerChannel(channel, cb) {
         cometd.subscribe(channel, function(message) {
             console.log('in channel: ', channel);
-            console.warn('new message: ', JSON.stringify((message.data)));
+            console.warn('new message: ', message.data);
+            cb(message.data);
         });
     }
 
