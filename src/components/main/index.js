@@ -55,9 +55,9 @@ class MainPage extends Component {
                     <Text fontSize={40}>Choose Color</Text>
                 </TouchableOpacity>
                 <Button
-                  title="Go to Second"
+                  title="Go to Messages"
                   color={"#fff"}
-                  onPress={() => this.props.navigation.navigate('Second')}
+                  onPress={() => this.props.navigation.navigate('Message')}
                 />
             </View>
         );

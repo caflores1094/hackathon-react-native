@@ -2,10 +2,10 @@ import React from 'react';
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import MainPage from './main';
 import Login from './login';
-import SecondScreen from './second-screen';
+import MessageScreen from './message-screen';
 import AuthLoading from './auth-loading';
 
-const AppStack = createStackNavigator({ Main: MainPage, Second: SecondScreen });
+const AppStack = createStackNavigator({ Main: MainPage, Message: MessageScreen });
 const AuthStack = createStackNavigator({ Login: Login });
 
 const AppNavigator = createAppContainer(createSwitchNavigator(

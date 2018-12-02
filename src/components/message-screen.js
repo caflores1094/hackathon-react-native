@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { Text, View, Button } from 'react-native';
 import { COLORS } from '../constants/colors.js';
+import channelHelper from '../utils/channel-helper.js';
 
-class SecondScreen extends Component {
+class MessageScreen extends Component {
     static navigationOptions = {
-        title: 'Second',
+        title: 'Message',
     }
     state = { background: COLORS[0].hexCode }
+
+    componentDidMount() {
+        channelHelper.subscribe();
+    }
     onChooseColor() {
         const randomIdx = Math.floor(Math.random() * (COLORS.length));
         this.setState({ background: COLORS[randomIdx].hexCode});
@@ -15,15 +20,19 @@ class SecondScreen extends Component {
     render() {
         return (
             <View style={{ flex: 1, alignSelf: 'stretch', backgroundColor: this.state.background }}>
-                <Text>SECOND SCREEN</Text>
+                <Text>Messages</Text>
                 <Button
                     onPress={() => this.onChooseColor()}
                     color={"#fff"}
                     title="Choose Color"
+                />
+                <Button
+                    onPress={() => channelHelper.publish(`hello there, testing with color: ${this.state.background}`)}
+                    title="test channel"
                 />
             </View>
         );
     }
 }
 
-export default SecondScreen;
+export default MessageScreen;
