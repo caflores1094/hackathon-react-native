@@ -25,3 +25,13 @@ export const fonts = {
   lg: 28,
   primary: 'Cochin'
 }
+
+export const styleClasses = {
+    textInput: {
+        fontSize: fonts.md,
+        height: 40,
+        borderColor: '#fff',
+        borderBottomWidth: 2,
+        marginBottom: 20,
+    },
+}
