@@ -1,12 +1,19 @@
 import React from 'react';
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
-import MainPage from './main';
-import Login from './login';
-import Messages from '../containers/messages-container';
 import AuthLoading from './auth-loading';
+import {
+    MainContainer,
+    LoginContainer,
+    MessagesContainer,
+} from '../containers';
 
-const AppStack = createStackNavigator({ Main: MainPage, Message: Messages });
-const AuthStack = createStackNavigator({ Login: Login });
+const AppStack = createStackNavigator({
+    Main: MainContainer,
+    Message: MessagesContainer,
+});
+const AuthStack = createStackNavigator({
+    Login: LoginContainer,
+});
 
 const AppNavigator = createAppContainer(createSwitchNavigator(
     {

@@ -24,30 +24,18 @@ class Login extends Component {
 
 
     handleLogin = () => {
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        const body = {
-            account: endpoints.account,
-            userName: this.state.username,
-            password: this.state.password,
-        };
-        const token = getUserToken(this.state.username, this.state.password)
-            .then(({ token, userId, userName }) => {
-                //TODO: Set the userid and username in REDUX not in the asyncStorage (maybe leave the userId in storage)
-                AsyncStorage.multiSet([['userToken', token], ['userId', userId], ['userName', userName]])
-                // AsyncStorage.setItem('userToken', token)
-                    .then((res) => {
-                        this.props.navigation.navigate('App');
-                    });
-            })
-            .catch((err) => {
-                this.setState({ loginError: ERROR_MESSAGES[err] });
+        this.props.login(this.state.username, this.state.password)
+            .then((res) => {
+                if (res && res.loginError) {
+                    this.setState({ loginError: res.loginError });
+                } else {
+                    this.props.navigation.navigate('App');
+                }
             });
     }
 
     render() {
+        console.warn('session: ', this.props.session);
         return (
             <View style={styles.container}>
                 <TextInput

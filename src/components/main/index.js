@@ -18,24 +18,10 @@ class MainPage extends Component {
 
     componentDidMount() {
         this.props.navigation.setParams({ logout: this._logout });
-        this._bootstrapAsync();
     }
 
-    // TODO: THIS WILL BE OBSOLETE ONCE REDUX STORE PROPER INFO, FOR NOW TO SEE IF WORKS
-    _bootstrapAsync = async () => {
-        const sessionInfo = await new Promise(resolve => {
-            //FETCH THE EPICENTER AUTH API STUFF HERE INSTEAD OF THE TIMEOUT
-            setTimeout(() => {
-                resolve(AsyncStorage.multiGet(['userToken', 'userId', 'userName']));
-                // resolve(AsyncStorage.getItem('userToken'));
-            }, 0);
-        });
-
-        this.setState({ userName: sessionInfo[2][1] });
-    };
-
     _logout = async () => {
-        await AsyncStorage.removeItem('userToken').then((result) => console.warn(result, 'done with token'));
+        await AsyncStorage.multiRemove(['userToken', 'userId', 'userName']).then((result) => console.warn(result, 'done with token'));
         this.props.navigation.navigate('Auth');
     }
 
@@ -47,7 +33,7 @@ class MainPage extends Component {
     render() {
         return (
             <View style={{ ...styles.container, backgroundColor: this.state.background }}>
-                <Text style={styles.header}>Welcome, {this.state.userName}</Text>
+                <Text style={styles.header}>Welcome, {this.props.session.userName}</Text>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => this.onChooseColor()}
