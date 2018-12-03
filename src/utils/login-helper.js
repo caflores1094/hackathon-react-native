@@ -5,6 +5,19 @@ export const ERROR_MESSAGES = {
     AUTHORIZATION_FAILURE: 'The user has no groups associated in this account',
 };
 
+export const getInfoFromToken = (token) => {
+    let encoded = token.split('.')[1];
+    while (encoded.length % 4 !== 0) { //eslint-disable-line
+        encoded += '=';
+    }
+    const info = JSON.parse(decodeString(encoded))
+    return {
+        token,
+        userId: info.user_id,
+        userName: (info.user_name || '').split('/')[0], //of form <user>/<team>
+    };
+};
+
 export const getUserToken = (userName, password) => {
     const headers = {
         'Content-Type': 'application/json',
@@ -27,16 +40,7 @@ export const getUserToken = (userName, password) => {
                 return Promise.reject('AUTHORIZATION_FAILURE');
             }
 
-            var encoded = data.access_token.split('.')[1];
-            while (encoded.length % 4 !== 0) { //eslint-disable-line
-                encoded += '=';
-            }
-            const info = JSON.parse(decodeString(encoded))
-
-            return Promise.resolve({
-                token: data.access_token,
-                userId: info.user_id,
-                userName: (info.user_name || '').split('/')[0], //of form <user>/<team>
-            });
+            const info = getInfoFromToken(data.access_token);
+            return Promise.resolve(info);
         })
 };

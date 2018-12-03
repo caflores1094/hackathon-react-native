@@ -2,3 +2,4 @@
 export { default as LoginContainer } from './login-container';
 export { default as MainContainer } from './main-container';
 export { default as MessagesContainer } from './messages-container';
+export { default as AuthLoadingContainer } from './auth-loading-container';

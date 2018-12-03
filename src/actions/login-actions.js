@@ -5,7 +5,7 @@ import {
     AsyncStorage,
 } from 'react-native';
 
-import { getUserToken, ERROR_MESSAGES } from '../utils/login-helper.js';
+import { getInfoFromToken, getUserToken, ERROR_MESSAGES } from '../utils/login-helper.js';
 
 const handleSessionData = (session) => ({
     type: RECEIVE_USER_SESSION,
@@ -28,4 +28,17 @@ export const login = (username, password) => {
                 return ({ loginError: ERROR_MESSAGES[err] });
             });
     };
+}
+
+export const checkIfLoggedIn = () => {
+    return (dispatch, getState) => {
+        return AsyncStorage.getItem('userToken')
+            .then((token) => {
+                if(!getState().login.userName) {
+                    const sessionInfo = getInfoFromToken(token);
+                    dispatch(handleSessionData(sessionInfo));
+                }
+                return Promise.resolve(token);
+            })
+    }
 }
