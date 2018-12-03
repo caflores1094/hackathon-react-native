@@ -14,16 +14,17 @@ import dataApiHelper from '../../utils/data-api-helper.js';
 import { styleClasses } from '../../styles/base.js';
 import styles from './style.js'
 
-//TODO: Extract out to a container once redux is connected
-
 class MessageScreen extends Component {
     static navigationOptions = {
         title: 'Messages',
     }
     state = {
-        messages: [],
         currentMessage: '',
         userName: '',
+    }
+
+    componentWillMount() {
+        this.props.getAllMessages();
     }
 
     componentDidMount() {
@@ -35,18 +36,13 @@ class MessageScreen extends Component {
             }
         });
 
-        dataApiHelper.getMessages()
-            .then(messages => this.setState({ messages }));
-
         AsyncStorage.getItem('userName')
             .then((userName) => this.setState({ userName }));
     }
 
     handleNewMessage(message) {
-        const newMessages = this.state.messages;
-        newMessages.push(message);
-        console.warn('newMessages', newMessages);
-        this.setState({ messages: newMessages, currentMessage: '' });
+        this.props.addMessage(message);
+        this.setState({ currentMessage: '' });
     }
 
     handleSendMessage() {
@@ -60,7 +56,7 @@ class MessageScreen extends Component {
                 <TextInput
                     autoCapitalize="none"
                     value={this.state.currentMessage}
-                    style={styleClasses.textInput}
+                    style={{ ...styleClasses.textInput, backgroundColor: '#fff', margin: 10, height: 50, padding: 5 }}
                     onChangeText={(message) => this.setState({ currentMessage: message })}
                 />
                 <TouchableOpacity
@@ -69,7 +65,7 @@ class MessageScreen extends Component {
                 >
                     <Text style={styles.buttonText}>Send Message</Text>
                 </TouchableOpacity>
-                {this.state.messages.sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()).map(({ id, text, sender }) => (
+                {this.props.messages.sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()).map(({ id, text, sender }) => (
                     <View key={id} style={sender === this.state.userName ? styles.myMessageContainer : styles.messageContainer}>
                         <Text style={styles.messageText}>{sender === this.state.userName ? 'Me' : 'From'}: {sender}</Text>
                         <Text style={styles.messageText}>Message: {text}</Text>

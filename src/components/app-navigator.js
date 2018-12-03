@@ -2,7 +2,7 @@ import React from 'react';
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import MainPage from './main';
 import Login from './login';
-import Messages from './messages';
+import Messages from '../containers/messages-container';
 import AuthLoading from './auth-loading';
 
 const AppStack = createStackNavigator({ Main: MainPage, Message: Messages });
