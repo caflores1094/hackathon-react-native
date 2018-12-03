@@ -1,7 +1,7 @@
 import Main from '../components/main';
 import { connect } from 'react-redux';
 import {
-    login,
+    logout,
 } from '../actions'
 
 const mapStateToProps = (state) => {
@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+    logout: () => dispatch(logout()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

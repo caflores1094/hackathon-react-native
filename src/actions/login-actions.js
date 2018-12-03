@@ -1,5 +1,6 @@
 import {
     RECEIVE_USER_SESSION,
+    LOGOUT,
 } from './actions';
 import {
     AsyncStorage,
@@ -11,6 +12,18 @@ const handleSessionData = (session) => ({
     type: RECEIVE_USER_SESSION,
     session,
 });
+
+export const logout = () => {
+    return (dispatch, getState) => {
+        return AsyncStorage.removeItem('userToken').then(() => {
+            dispatch({
+                type: LOGOUT,
+            });
+            return Promise.resolve({ message: 'Logout successful, userToken removed'});
+        });
+    };
+}
+
 
 export const login = (username, password) => {
     return (dispatch, getState) => {
@@ -34,7 +47,7 @@ export const checkIfLoggedIn = () => {
     return (dispatch, getState) => {
         return AsyncStorage.getItem('userToken')
             .then((token) => {
-                if(!getState().login.userName) {
+                if(token && !getState().login.userName) {
                     const sessionInfo = getInfoFromToken(token);
                     dispatch(handleSessionData(sessionInfo));
                 }

@@ -35,7 +35,6 @@ class Login extends Component {
     }
 
     render() {
-        console.warn('session: ', this.props.session);
         return (
             <View style={styles.container}>
                 <TextInput

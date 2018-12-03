@@ -1,6 +1,5 @@
 import React from 'react';
 import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
-// import AuthLoading from './auth-loading';
 import {
     AuthLoadingContainer,
     MainContainer,

@@ -17,12 +17,12 @@ class MainPage extends Component {
     state = { background: COLORS[0].hexCode, userName: '' }
 
     componentDidMount() {
-        this.props.navigation.setParams({ logout: this._logout });
+        this.props.navigation.setParams({ logout: () => this._logout() });
     }
 
-    _logout = async () => {
-        await AsyncStorage.multiRemove(['userToken', 'userId', 'userName']).then((result) => console.warn(result, 'done with token'));
-        this.props.navigation.navigate('Auth');
+    _logout = () => {
+        this.props.logout()
+            .then((res) => this.props.navigation.navigate('Auth'))
     }
 
     onChooseColor() {
